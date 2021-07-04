@@ -1,4 +1,5 @@
-﻿using ElasticSearchExample.Models;
+﻿using ElasticSearchExample.ELK.Base;
+using ElasticSearchExample.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,15 @@ namespace ElasticSearchExample.Controller
         [HttpPost(nameof(Index))]
         public IActionResult Index(IndexModel model)
         {
+            Elastic.Instance.InsertDocument(new ELK.Model.ElasticModel()
+            {
+                Date = DateTime.Now.ToShortDateString(),
+                ExceptionMessage = "test",
+                Location = "suite",
+                Message = "test",
+                Service = ELK.Enums.ServicesNameEnum.SUIT,
+                WarningLevel = "Info"
+            });
             return Ok(HttpStatusCode.OK);
         }
     }
