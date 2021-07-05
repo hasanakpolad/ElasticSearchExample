@@ -1,5 +1,6 @@
 ﻿using ElasticSearchExample.ELK.Base;
 using ElasticSearchExample.Models;
+using ElasticSearchExample.RabbitMq.Base;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace ElasticSearchExample.Controller
                 Service = ELK.Enums.ServicesNameEnum.SUIT,
                 WarningLevel = "Info"
             });
+            RabbitMqConnection connection = new RabbitMqConnection();
+            connection.Connection();
             return Ok(HttpStatusCode.OK);
         }
     }
