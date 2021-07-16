@@ -3,7 +3,6 @@ using ElasticSearchExample.RabbitMq.Model;
 using ElasticSearchExample.RabbitMq.Producer;
 using System;
 using System.Collections.Generic;
-using Faker;
 using System.Linq;
 using System.Threading.Tasks;
 using Bogus;

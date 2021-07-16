@@ -1,5 +1,7 @@
 ﻿using ElasticSearchExample.ELK.Base;
 using Nest;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +15,16 @@ namespace ElasticSearchExample.ELK.Logger
         #region Single Section
 
         private static readonly Lazy<ElasticLogger> _instance = new Lazy<ElasticLogger>(() => new ElasticLogger());
+        ConnectionSettings settings = new ConnectionSettings(new Uri("http://localhost:9200"));
         private ElasticLogger()
         {
-
+            Configure();
         }
 
         public static ElasticLogger Instance => _instance.Value;
 
         #endregion
 
-        ConnectionSettings settings = new ConnectionSettings(new Uri(""));
 
         public void Error(Exception ex, string message)
         {
@@ -32,6 +34,21 @@ namespace ElasticSearchExample.ELK.Logger
         public void Info(string message, string serviceName)
         {
             _log.Information(message, serviceName);
+        }
+
+        private void Configure ()
+        {
+            var loggerConfiguration = new LoggerConfiguration()
+               .MinimumLevel.Verbose()
+               .WriteTo.Elasticsearch(
+                   new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
+                   {
+                       AutoRegisterTemplate = true,
+                       AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+                       TemplateName = "serilog-events-template",
+                       IndexFormat = "serilog-{0:yyyy.MM.dd}"
+                   });
+            _log = loggerConfiguration.CreateLogger();
         }
     }
 }

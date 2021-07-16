@@ -49,6 +49,9 @@ namespace ElasticSearchExample.RabbitMq.Consumer
         public void StartConsume()
         {
             _userModel = RabbitMqConnection.Channel("User_Model");
+            EventingBasicConsumer userConsumer = new EventingBasicConsumer(_userModel);
+            userConsumer.Received += SaveRequestOnReceived<UserModel>;
+            _userModel.BasicConsume("User_Model", true, userConsumer);
         }
 
         private void SaveRequestOnReceived<T>(object sender, BasicDeliverEventArgs e)

@@ -23,7 +23,7 @@ namespace ElasticSearchExample.RabbitMq.Base
                 return Connection;
             var conn = new ConnectionFactory()
             {
-                HostName = "localhost"
+                Uri = new Uri("amqp://guest:guest@localhost")
             };
 
             Connection = conn.CreateConnection();
